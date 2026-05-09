@@ -1,0 +1,21 @@
+{
+  "name": "finsight-backend",
+  "version": "1.0.0",
+  "description": "Express backend proxy for FinSight using Anthropic Claude.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.93.0",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.1",
+    "node-fetch": "^2.7.0"
+  }
+}

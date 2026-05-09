@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "finsight-api",
+		"name": "FinSight API",
+		"description": "Multi-user Finance Advisor API with Authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201 || pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"token\", jsonData.token);",
+									"    pm.environment.set(\"userId\", jsonData.user.id);",
+									"    console.log(\"✅ Token saved:\", jsonData.token.substring(0, 20) + \"...\");",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john{{$randomInt}}.doe@example.com\",\n  \"password\": \"securepassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"token\", jsonData.token);",
+									"    pm.environment.set(\"userId\", jsonData.user.id);",
+									"    console.log(\"✅ Token saved from login\");",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securepassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Analysis",
+			"item": [
+				{
+					"name": "Analyze Statement",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"statementId\", jsonData.statementId);",
+									"    console.log(\"✅ Statement saved with ID:\", jsonData.statementId);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prompt\": \"Analyze this bank statement CSV data:\\nDate,Description,Amount\\n2024-01-01,Salary,5000\\n2024-01-02,Rent,-1200\\n2024-01-03,Groceries,-150\\n2024-01-04,Entertainment,-50\\nProvide spending insights and recommendations.\",\n  \"fileName\": \"statement_january_2024.csv\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/analyze",
+							"host": ["{{baseUrl}}"],
+							"path": ["analyze"]
+						}
+					}
+				},
+				{
+					"name": "Chat",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"What are my top spending categories based on the analysis?\",\n  \"history\": []\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chat",
+							"host": ["{{baseUrl}}"],
+							"path": ["chat"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "History",
+			"item": [
+				{
+					"name": "Get All Statements",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/history",
+							"host": ["{{baseUrl}}"],
+							"path": ["history"]
+						}
+					}
+				},
+				{
+					"name": "Get Single Statement",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/history/{{statementId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["history", "{{statementId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/",
+					"host": ["{{baseUrl}}"],
+					"path": [""]
+				}
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "statementId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
