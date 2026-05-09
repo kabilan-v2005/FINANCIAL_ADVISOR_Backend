@@ -13,7 +13,7 @@ const Statement = require("./models/Statement");
 const authMiddleware = require("./middleware/authMiddleware");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 const API_KEY = process.env.GROQ_API_KEY;
 const MONGO_URI = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
